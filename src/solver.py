@@ -3,6 +3,15 @@ from typing import Callable
 
 
 class Solver:
+    """
+    System of linear equations solver. Solves equations of the form Ax = b 
+    using the gaussian elimination method.
+
+    Args:
+        `A`: numpy.ndarray - the A matrix
+        `b`: numpy.ndarray - the targets
+    """
+
     def __init__(self, A: np.ndarray, b: np.ndarray) -> None:
         self.A = A.astype(np.float64)
         self.b = b.astype(np.float64)
@@ -11,6 +20,15 @@ class Solver:
         self.pivots: list[tuple[int, int]] = []
 
     def solve(self) -> tuple[np.ndarray, list[np.ndarray]]:
+        """
+        Solves Ax = b.
+
+        Returns:
+        A tuple (xp, null_space) containing
+            `xp`: numpy.ndarray - a particular solution of Ax = b
+            `null_space`: list[numpy.ndarray] - a list of vectors
+            spanning the null space of `A`.
+        """
         # create the augmented matrix from `A` and `b`
         augmatrix = self._augment()
         # get the row echelon form of the agumented matrix
@@ -18,11 +36,11 @@ class Solver:
         # get the reduced row echelon form
         self._reduced_row_echelon_form(augmatrix)
         # get a particular solution
-        bp = self._particular_sol(augmatrix)
+        xp = self._particular_sol(augmatrix)
         # get the null space of the matrix
         null_space = self._null_space(augmatrix)
 
-        return (bp, null_space)
+        return (xp, null_space)
 
     def _null_space(self, augmatrix: np.ndarray) -> list[np.ndarray]:
         sols: list[np.ndarray] = []
@@ -63,10 +81,10 @@ class Solver:
         # get list of pivot columns for indexing
         pivot_cols = self._get_pivot_cols(list)
 
-        bp = np.zeros((self.cols,))
-        bp[pivot_cols] = augmatrix[:, -1]
+        xp = np.zeros((self.cols,))
+        xp[pivot_cols] = augmatrix[:, -1]
 
-        return bp
+        return xp
 
     def _reduced_row_echelon_form(self, augmatrix: np.ndarray):
         for row, col in reversed(self.pivots):
@@ -123,6 +141,6 @@ if __name__ == "__main__":
 
     b = np.array([-3, 2, 0, 1])
     solver = Solver(A, b)
-    bp, null_space = solver.solve()
-    print("Particular solution:", bp)
+    xp, null_space = solver.solve()
+    print("Particular solution:", xp)
     print("Null space:", null_space)
