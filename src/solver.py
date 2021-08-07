@@ -7,7 +7,7 @@ class Solver:
         self.b = b.astype(np.float64)
         self.rows = A.shape[0]
         self.cols = A.shape[1]
-        self.pivots: list[int] = []
+        self.pivots: list[tuple[int, int]] = []
 
     def solve(self):
         # create the augmented matrix from `A` and `b`
@@ -17,7 +17,29 @@ class Solver:
         # get the row echelon form of the agumented matrix
         self._row_echelon_form(augmatrix)
         print(augmatrix)
+        print("=============================")
+        # get the reduced row echelon form
+        self._reduced_row_echelon_form(augmatrix)
+        print(augmatrix)
+        # get a particular solution
+        bp = self._particular_sol(augmatrix)
+        print(self.A @ bp)
         print("pivots:", self.pivots)
+
+    def _particular_sol(self, augmatrix: np.ndarray):
+        pivot_cols = [col for _, col in self.pivots]
+
+        bp = np.zeros((self.cols,))
+        bp[pivot_cols] = augmatrix[:, -1]
+
+        return bp
+
+    def _reduced_row_echelon_form(self, augmatrix: np.ndarray):
+        for row, col in reversed(self.pivots):
+            vals = augmatrix[row, :]
+
+            for i in range(row):
+                augmatrix[i, :] -= augmatrix[i, col] * vals
 
     def _row_echelon_form(self, augmatrix: np.ndarray):
         row = 0
@@ -25,7 +47,7 @@ class Solver:
             if (x := augmatrix[row, col]) != 0:
                 augmatrix[row, :] /= x
                 self._reduce_below(augmatrix, row, col)
-                self.pivots.append(col)
+                self.pivots.append((row, col))
 
                 row += 1
                 if row == self.rows:
