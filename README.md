@@ -15,8 +15,8 @@ $$ -->
 The solution is acquired following these steps:
 
 1. The solver creates the augmented matrix `[A | b]`.
-2. The augmetned matrix is reduced to row-echelon form using Gaussian elimination.
-3. If the number of pivots are fewer than the number of nonzero entries in `b`, the solver exists.
+2. The augmetned matrix is reduced to row-echelon form (REF) using Gaussian elimination.
+3. If the number of pivots are fewer than the number of nonzero entries in REF `b`, the solver exists.
 4. The augmented matrix is then further reduced into the reduced row-echelon form (RREF).
 5. The solver reads off the particular from the RREF.
 6. Finally it finds the null space using back-substitution on the RREF.
