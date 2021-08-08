@@ -3,7 +3,7 @@ A linear equation solver using gaussian elimination. Implemented for fun and lea
 The solver will solve equations of the type:
 
 <!-- $$
-\mathbf{A}x = \mathbf{b}
+\mathbf{A}\mathbf{x} = \mathbf{b}
 $$ -->
 
-<div align="center"><img style="background: white;" src="svg/31EZVlKS3X.svg"></div>
+<div align="center"><img style="background: white;" src="svg/Mv09d16ZdS.svg"></div>.
