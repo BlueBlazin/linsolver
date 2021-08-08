@@ -7,3 +7,16 @@ The solver will solve equations of the type:
 $$ -->
 
 <div align="center"><img style="background: white;" src="svg/Mv09d16ZdS.svg"></div>
+
+**A** can be rectangular and/or singular. The solver will return a particular solution as well as a list of vectors spanning the null space of **A** required for the general solution.
+
+## How it works
+
+The solution is acquired following these steps:
+
+1. The solver creates the augmented matrix `[A | b]`.
+2. The augmetned matrix is reduced to row-echelon form using Gaussian elimination.
+3. If the number of pivots are fewer than the number of nonzero entries in `b`, the solver exists.
+4. The augmented matrix is then further reduced into the reduced row-echelon form (RREF).
+5. The solver reads off the particular from the RREF.
+6. Finally it finds the null space using back-substitution on the RREF.

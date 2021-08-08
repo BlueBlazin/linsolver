@@ -33,11 +33,11 @@ class Solver:
         augmatrix = self._augment()
         # get the row echelon form of the agumented matrix
         self._row_echelon_form(augmatrix)
-        # get the reduced row echelon form
-        self._reduced_row_echelon_form(augmatrix)
         # exit if solution doesn't exist`
         if len(self.pivots) < np.count_nonzero(augmatrix[:, -1]):
             return (None, [])
+        # get the reduced row echelon form
+        self._reduced_row_echelon_form(augmatrix)
         # get a particular solution
         xp = self._particular_sol(augmatrix)
         # get the null space of the matrix
