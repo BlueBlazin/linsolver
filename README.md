@@ -6,4 +6,4 @@ The solver will solve equations of the type:
 \mathbf{A}\mathbf{x} = \mathbf{b}
 $$ -->
 
-<div align="center"><img style="background: white;" src="svg/Mv09d16ZdS.svg"></div>.
+<div align="center"><img style="background: white;" src="svg/Mv09d16ZdS.svg"></div>
