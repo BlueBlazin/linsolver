@@ -116,9 +116,7 @@ class Solver:
         vals = augmatrix[row, :]
         row += 1
 
-        while row < self.rows:
-            augmatrix[row, :] -= augmatrix[row, col] * vals
-            row += 1
+        augmatrix[row:self.rows, :] -= augmatrix[row:self.rows, col].reshape((-1, 1)) * vals
 
     def _swap_first_nonzero(self, augmatrix: np.ndarray, row: int, col: int):
         if augmatrix[row, col] != 0:
