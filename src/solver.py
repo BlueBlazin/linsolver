@@ -89,7 +89,7 @@ class Solver:
         pivot_rows = self._get_pivots(list, axis=0)
 
         xp = np.zeros((self.cols,))
-        xp[pivot_cols] = augmatrix[:, -1][pivot_rows]
+        xp[pivot_cols] = augmatrix[pivot_rows, -1]
 
         return xp
 
