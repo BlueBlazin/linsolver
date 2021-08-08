@@ -8,8 +8,8 @@ class Solver:
     using the gaussian elimination method.
 
     Args:
-        `A`: numpy.ndarray - the A matrix
-        `b`: numpy.ndarray - the targets
+        - `A`: numpy.ndarray - the A matrix
+        - `b`: numpy.ndarray - the targets
     """
 
     def __init__(self, A: np.ndarray, b: np.ndarray) -> None:
@@ -25,8 +25,8 @@ class Solver:
 
         Returns:
         A tuple (xp, null_space) containing
-            `xp`: numpy.ndarray - a particular solution of Ax = b
-            `null_space`: list[numpy.ndarray] - a list of vectors
+            - `xp`: numpy.ndarray | None - a particular solution of Ax = b. `None` solution doesn't exists.
+            - `null_space`: list[numpy.ndarray] - a list of vectors
             spanning the null space of `A`.
         """
         # create the augmented matrix from `A` and `b`
