@@ -95,10 +95,8 @@ class Solver:
 
     def _reduced_row_echelon_form(self, augmatrix: np.ndarray):
         for row, col in reversed(self.pivots):
-            vals = augmatrix[row, :]
-
-            for i in range(row):
-                augmatrix[i, :] -= augmatrix[i, col] * vals
+            vals = augmatrix[row, :].reshape((1, -1))
+            augmatrix[:row, :] -= augmatrix[:row, col].reshape((-1, 1)) * vals
 
     def _row_echelon_form(self, augmatrix: np.ndarray):
         row = 0
