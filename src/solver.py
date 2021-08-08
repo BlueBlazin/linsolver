@@ -36,19 +36,22 @@ class Solver:
         # get the reduced row echelon form
         self._reduced_row_echelon_form(augmatrix)
         # exit if solution doesn't exist`
-        if len(self.pivots) == 0:
-            return (None, self._null_space(augmatrix))
+        if len(self.pivots) < np.count_nonzero(augmatrix[:, -1]):
+            return (None, [])
         # get a particular solution
         xp = self._particular_sol(augmatrix)
         # get the null space of the matrix
-        null_space = self._null_space(augmatrix)
+        if xp is not None:
+            null_space = self._null_space(augmatrix)
+        else:
+            null_space = []
 
         return (xp, null_space)
 
     def _null_space(self, augmatrix: np.ndarray) -> list[np.ndarray]:
         sols: list[np.ndarray] = []
         nsols = 0
-        pivot_cols = self._get_pivot_cols(set)
+        pivot_cols = self._get_pivots(set, axis=1)
 
         # last pivot column
         col = 0
@@ -82,16 +85,13 @@ class Solver:
 
     def _particular_sol(self, augmatrix: np.ndarray) -> Optional[np.ndarray]:
         # get list of pivot columns for indexing
-        pivot_cols = self._get_pivot_cols(list)
-        nonpivot_cols = [col for col in range(self.cols) if col not in pivot_cols]
+        pivot_cols = self._get_pivots(list, axis=1)
+        pivot_rows = self._get_pivots(list, axis=0)
 
         xp = np.zeros((self.cols,))
-        xp[pivot_cols] = augmatrix[pivot_cols, -1]
+        xp[pivot_cols] = augmatrix[:, -1][pivot_rows]
 
-        if augmatrix[nonpivot_cols, -1] == np.zeros((len(nonpivot_cols),)):
-            return xp
-        else:
-            return None
+        return xp
 
     def _reduced_row_echelon_form(self, augmatrix: np.ndarray):
         for row, col in reversed(self.pivots):
@@ -134,8 +134,8 @@ class Solver:
     def _augment(self) -> np.ndarray:
         return np.c_[self.A, self.b]
 
-    def _get_pivot_cols(self, container: Callable) -> list[int]:
-        return container(col for _, col in self.pivots)
+    def _get_pivots(self, container: Callable, axis: int) -> list[int]:
+        return container(pivot[axis] for pivot in self.pivots)
 
 
 if __name__ == "__main__":
