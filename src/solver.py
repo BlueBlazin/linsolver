@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Callable
+from typing import Callable, Optional
 
 
 class Solver:
@@ -19,7 +19,7 @@ class Solver:
         self.cols = A.shape[1]
         self.pivots: list[tuple[int, int]] = []
 
-    def solve(self) -> tuple[np.ndarray, list[np.ndarray]]:
+    def solve(self) -> tuple[Optional[np.ndarray], list[np.ndarray]]:
         """
         Solves Ax = b.
 
@@ -35,6 +35,9 @@ class Solver:
         self._row_echelon_form(augmatrix)
         # get the reduced row echelon form
         self._reduced_row_echelon_form(augmatrix)
+        # exit if solution doesn't exist`
+        if len(self.pivots) == 0:
+            return (None, self._null_space(augmatrix))
         # get a particular solution
         xp = self._particular_sol(augmatrix)
         # get the null space of the matrix
@@ -77,14 +80,18 @@ class Solver:
 
         return sols
 
-    def _particular_sol(self, augmatrix: np.ndarray) -> np.ndarray:
+    def _particular_sol(self, augmatrix: np.ndarray) -> Optional[np.ndarray]:
         # get list of pivot columns for indexing
         pivot_cols = self._get_pivot_cols(list)
+        nonpivot_cols = [col for col in range(self.cols) if col not in pivot_cols]
 
         xp = np.zeros((self.cols,))
-        xp[pivot_cols] = augmatrix[:, -1]
+        xp[pivot_cols] = augmatrix[pivot_cols, -1]
 
-        return xp
+        if augmatrix[nonpivot_cols, -1] == np.zeros((len(nonpivot_cols),)):
+            return xp
+        else:
+            return None
 
     def _reduced_row_echelon_form(self, augmatrix: np.ndarray):
         for row, col in reversed(self.pivots):
@@ -128,7 +135,7 @@ class Solver:
         return np.c_[self.A, self.b]
 
     def _get_pivot_cols(self, container: Callable) -> list[int]:
-        return [col for _, col in self.pivots]
+        return container(col for _, col in self.pivots)
 
 
 if __name__ == "__main__":
@@ -140,6 +147,7 @@ if __name__ == "__main__":
     ])
 
     b = np.array([-3, 2, 0, 1])
+
     solver = Solver(A, b)
     xp, null_space = solver.solve()
     print("Particular solution:", xp)
