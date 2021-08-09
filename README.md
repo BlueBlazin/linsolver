@@ -20,3 +20,19 @@ The solution is acquired following these steps:
 4. The augmented matrix is then further reduced into a reduced row-echelon form (RREF).
 5. The solver reads off the particular from the RREF.
 6. Finally it finds the null space using back-substitution on the RREF.
+
+## Example
+
+```py
+A = np.array([
+    [-2, 4, -2, 1, 4],
+    [4, -8, 3, -3, 1],
+    [1, -2, 1, -1, 1],
+    [1, -2, 0, -3, 4]
+])
+
+b = np.array([-3, 2, 0, 1])
+
+solver = Solver(A, b)
+xp, null_space = solver.solve()
+```
